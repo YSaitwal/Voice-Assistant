@@ -1,0 +1,161 @@
+import pyttsx3 #pip install pyttsx3
+import speech_recognition as sr #pip install speechRecognition
+import datetime
+import wikipedia #pip install wikipedia
+import webbrowser
+import os
+import random
+import smtplib
+from tkinter import *
+from tkinter import ttk
+
+engine = pyttsx3.init('sapi5')
+voices = engine.getProperty('voices')
+
+engine.setProperty('voice', voices[0].id)
+
+
+def speak(audio):
+    engine.say(audio)
+    engine.runAndWait()
+
+
+def wishMe():
+    hour = int(datetime.datetime.now().hour)
+    if hour>=0 and hour<12:
+        speak("Good Morning!")
+
+    elif hour>=12 and hour<18:
+        speak("Good Afternoon!")
+
+    else:
+        speak("Good Evening!")
+
+    speak("i am stephen. Please tell me how may I help you")
+
+def takeCommand():
+    #It takes microphone input from the user and returns string output
+
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Listening...")
+
+        r.pause_threshold = 1
+        audio = r.listen(source)
+
+    try:
+        print("Recognizing...")
+        query = r.recognize_google(audio, language='en-in')
+        print(f"User said: {query}\n")
+
+    except Exception as e:
+        # print(e)
+        print("Say that again please...")
+        # speak("sorry i didnt get it. Say that again please")
+        return "None"
+    return query
+
+def sendEmail(to, content):
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.login('youremail@gmail.com', 'your-password')
+    server.sendmail('youremail@gmail.com', to, content)
+    server.close()
+
+
+if __name__ == "__main__":
+    wishMe()
+    key = '1'
+
+    def gui():
+        root = Tk()
+        b1 = ttk.Button(root, text="click here for next command", command=label)
+        b1.pack()
+
+        root.mainloop()
+
+
+    def label():
+        k=0
+        query = takeCommand().lower()
+
+        # Logic for executing tasks based on query
+        if 'wikipedia' in query:
+            speak('Searching Wikipedia...')
+            query = query.replace("wikipedia", "")
+            results = wikipedia.summary(query, sentences=2)
+            speak("According to Wikipedia")
+            print(results)
+            speak(results)
+
+        elif 'open youtube' in query:
+            speak('ok, opening youtube')
+            webbrowser.open("youtube.com")
+
+        elif 'open google' in query:
+            speak('ok, opening google')
+            webbrowser.open("google.com")
+
+        elif 'drive'in query:
+            query = query.replace("drive", "")
+            query = query.replace("open", "")
+            query=query.replace(" ", "")
+            speak(f'ok, opening {query} drive')
+            print(f'ok, opening {query} drive')
+            a=":"
+            path = "{}{}\\".format(query,a)
+
+            print(path)
+
+
+
+            os.startfile(path, "open")
+
+        elif 'open stackoverflow' in query:
+            speak('ok, opening stackoverflow')
+            webbrowser.open("stackoverflow.com")
+
+        elif 'play' in query:
+                speak('ok, the results are')
+                query = query.replace("play","")
+                webbrowser.open(query)
+
+
+
+        elif 'start music' in query:
+            music_dir = 'C:\\Users\\LENOVO\\Desktop\\my music'
+            songs = os.listdir(music_dir)
+            print(songs)
+            s=random.randint(0,9)
+            print("playing ",songs[s] ,s)
+            os.startfile(os.path.join(music_dir, songs[s]))
+
+        elif 'the time' in query:
+            strTime = datetime.datetime.now().strftime("%H:%M:%S")
+            print(strTime)
+            speak(f"Sir, the time is {strTime}")
+
+        elif 'date' in query:
+            strTime = datetime.datetime.now().strftime("%x")
+            print(strTime)
+            speak(f"Sir todays date is {strTime}")
+
+        elif 'day' in query:
+            strTime = datetime.datetime.now().strftime("%A")
+            print(strTime)
+            speak(f"Sir todays day is {strTime}")
+
+        elif 'month' in query:
+            strTime = datetime.datetime.now().strftime("%B")
+            print(strTime)
+            speak(f"Sir this month is {strTime}")
+
+        elif 'open code' in query:
+            codePath = "C:\\Users\\Haris\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
+            os.startfile(codePath)
+
+
+    label()
+    gui()
+
