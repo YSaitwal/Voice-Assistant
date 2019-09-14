@@ -31,7 +31,7 @@ def wishMe():
     else:
         speak("Good Evening!")
 
-    speak("i am stephen. Please tell me how may I help you")
+    speak("i am marcus. Please tell me how may I help you")
 
 def takeCommand():
     #It takes microphone input from the user and returns string output
@@ -118,8 +118,11 @@ if __name__ == "__main__":
 
         elif 'play' in query:
                 speak('ok, the results are')
-                query = query.replace("play","")
-                webbrowser.open(query)
+                query = query.replace("play ", "")
+                query = query.replace(" song", "")
+                query = query.replace(" ", "+")
+                webbrowser.open("youtube.com/results?search_query={}".format(query))
+
 
 
 
