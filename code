@@ -8,6 +8,10 @@ import random
 import smtplib
 from tkinter import *
 from tkinter import ttk
+from pyowm import OWM
+import requests
+from bs4 import BeautifulSoup
+
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -31,7 +35,7 @@ def wishMe():
     else:
         speak("Good Evening!")
 
-    speak("i am marcus. Please tell me how may I help you")
+    speak("i am Tom. Please tell me how may I help you")
 
 def takeCommand():
     #It takes microphone input from the user and returns string output
@@ -72,12 +76,15 @@ if __name__ == "__main__":
         root = Tk()
         b1 = ttk.Button(root, text="click here for next command", command=label)
         b1.pack()
-
+        mi=PhotoImage(file="C:\\Users\\LENOVO\\PycharmProjects\\untitled5\\mic.png")
+        b1.config(image=mi)
+        tmi=mi.subsample(6,6)
+        b1.config(image=tmi)
         root.mainloop()
 
 
     def label():
-        k=0
+
         query = takeCommand().lower()
 
         # Logic for executing tasks based on query
@@ -144,7 +151,7 @@ if __name__ == "__main__":
             print(strTime)
             speak(f"Sir todays date is {strTime}")
 
-        elif 'day' in query:
+        elif ' day' in query:
             strTime = datetime.datetime.now().strftime("%A")
             print(strTime)
             speak(f"Sir todays day is {strTime}")
@@ -153,6 +160,55 @@ if __name__ == "__main__":
             strTime = datetime.datetime.now().strftime("%B")
             print(strTime)
             speak(f"Sir this month is {strTime}")
+
+        elif 'weather' in query:
+            query = query.replace("what is the weather in ", "")
+            query = query.replace(" ", "")
+
+            owm = OWM(API_key='ab0d5e80e8dafb2cb81fa9e82431c1fa')
+            obs = owm.weather_at_place(query)
+            w = obs.get_weather()
+            k = w.get_status()
+            x = w.get_temperature(unit='celsius')
+            print(
+                'The current weather in %s is %s. The maximum temperature is %0.2f and the minimum temperature is %0.2f degree celcius' % (
+                    query, k, x['temp_max'], x['temp_min']))
+            speak(
+                'The current weather in %s is %s. The maximum temperature is %0.2f and the minimum temperature is %0.2f degree celcius' % (
+                query, k, x['temp_max'], x['temp_min']))
+
+        elif "today's news" in query:
+
+
+
+            def print_headlines(response_text):
+                count = 1
+                soup = BeautifulSoup(response_text, 'lxml')
+                headlines = soup.find_all(attrs={"itemprop": "headline"})
+                for headline in headlines:
+                    if count<7:
+
+                        print(headline.text)
+                        speak(headline.text)
+                        count=count+1
+
+            url = 'https://inshorts.com/en/read'
+            response = requests.get(url)
+
+            print_headlines(response.text)
+
+        #     try:
+        #         news_url = "https://news.google.com/news/rss"
+        #         Client = urlopen(news_url)
+        #         xml_page = Client.read()
+        #         Client.close()
+        #         soup_page = soup(xml_page, "xml")
+        #         news_list = soup_page.findAll("item")
+        #         for news in news_list[:15]:
+        #             speak(news.title.text.encode('utf-8'))
+        #     except Exception as e:
+        #         print(e)
+
 
         elif 'open code' in query:
             codePath = "C:\\Users\\Haris\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
