@@ -1,6 +1,7 @@
 import pyttsx3 #pip install pyttsx3
 import speech_recognition as sr #pip install speechRecognition
 import datetime
+import time #   timer
 import wikipedia #pip install wikipedia
 import webbrowser
 import os
@@ -8,9 +9,9 @@ import random
 import smtplib
 from tkinter import *
 from tkinter import ttk
-from pyowm import OWM
+from pyowm import OWM #weather
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup #for news
 
 
 engine = pyttsx3.init('sapi5')
@@ -78,7 +79,7 @@ if __name__ == "__main__":
         b1.pack()
         mi=PhotoImage(file="C:\\Users\\LENOVO\\PycharmProjects\\untitled5\\mic.png")
         b1.config(image=mi)
-        tmi=mi.subsample(6,6)
+        tmi=mi.subsample(2,2)
         b1.config(image=tmi)
         root.mainloop()
 
@@ -129,9 +130,17 @@ if __name__ == "__main__":
                 query = query.replace(" song", "")
                 query = query.replace(" ", "+")
                 webbrowser.open("youtube.com/results?search_query={}".format(query))
+        elif 'timer' in query:
 
-
-
+            query = query.replace("start timer of ", "")
+            query = query.replace(" seconds", "")
+            boom = int(query)
+            while boom > 0:
+                time.sleep(1)
+                print(boom)
+                boom -= 1
+            print("countdown over")
+            speak("countdown over")
 
         elif 'start music' in query:
             music_dir = 'C:\\Users\\LENOVO\\Desktop\\my music'
@@ -196,22 +205,18 @@ if __name__ == "__main__":
             response = requests.get(url)
 
             print_headlines(response.text)
-
-        #     try:
-        #         news_url = "https://news.google.com/news/rss"
-        #         Client = urlopen(news_url)
-        #         xml_page = Client.read()
-        #         Client.close()
-        #         soup_page = soup(xml_page, "xml")
-        #         news_list = soup_page.findAll("item")
-        #         for news in news_list[:15]:
-        #             speak(news.title.text.encode('utf-8'))
-        #     except Exception as e:
-        #         print(e)
+        # var1 = ['who made you', 'who created you']
+        # var2 = ['I_was_created_by_yash and devarsh.', 'yash and devarsh']
+        elif "who created you" in query:
 
 
-        elif 'open code' in query:
-            codePath = "C:\\Users\\Haris\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
+            # elif r.recognize_google(audio) in var1:
+            print("i was created by yash and devarsh")
+            speak("i was created by yash and devarsh")
+
+
+        elif 'open pycharm' in query:
+            codePath = "C:\\Program Files\\JetBrains\\PyCharm Community Edition 2019.1.4\\bin"
             os.startfile(codePath)
 
     label()
