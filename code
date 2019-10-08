@@ -144,11 +144,26 @@ if __name__ == "__main__":
         elif 'start music' in query:
             music_dir = 'C:\\Users\\LENOVO\\Desktop\\my music'
             songs = os.listdir(music_dir)
-            print(songs)
+            i=0
+            for x in songs:
+                print(i ,"  ", x)
+                i+=1
             s=random.randint(0,9)
-            print("playing ",songs[s] ,s)
+            print("playing ",s,songs[s] )
             os.startfile(os.path.join(music_dir, songs[s]))
 
+        elif 'choice' in query:
+            music_dir = 'C:\\Users\\LENOVO\\Desktop\\my music'
+            songs = os.listdir(music_dir)
+            i=0
+            for x in songs:
+                print(i, "  ",  x)
+                i += 1
+            speak("please speak the number of track")
+            query = takeCommand().lower()
+            i= int(query)
+            print("playing ",i ,songs[i] )
+            os.startfile(os.path.join(music_dir, songs[i]))
         elif 'the time' in query:
             strTime = datetime.datetime.now().strftime("%H:%M:%S")
             print(strTime)
