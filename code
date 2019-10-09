@@ -164,7 +164,7 @@ if __name__ == "__main__":
             i= int(query)
             print("playing ",i ,songs[i] )
             os.startfile(os.path.join(music_dir, songs[i]))
-        elif 'the time' in query:
+        elif 'time' in query:
             strTime = datetime.datetime.now().strftime("%H:%M:%S")
             print(strTime)
             speak(f"Sir, the time is {strTime}")
@@ -243,13 +243,17 @@ if __name__ == "__main__":
 
 
             # elif r.recognize_google(audio) in var1:
-            print("i was created by yash and devarsh")
-            speak("i was created by yash and devarsh")
+            print("I was created by yash and devarsh")
+            speak("I was created by yash and devarsh")
 
 
-        elif 'open pycharm' in query:
-            codePath = "C:\\Program Files\\JetBrains\\PyCharm Community Edition 2019.1.4\\bin"
+        elif 'open netbeans' in query:
+            speak("opening netbeans")
+            codePath ="C:\\Program Files\\NetBeans 8.2\\bin\\netbeans.exe"
             os.startfile(codePath)
+        # elif 'open camera' in query:
+        #       codePath ="C:\\Program Files (x86)\\CyberLink\\YouCam"
+        #       os.startfile(codePath)
 
         elif 'who are you' in query:
             speak("I am Tom , speed 1 tera hertz,   memmory 1 zeta bytes")
